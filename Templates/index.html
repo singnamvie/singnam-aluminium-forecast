@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Singnam Aluminum Forecast</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Singnam Aluminum Price Forecast</h1>
+        <canvas id="forecastChart"></canvas>
+        <h2>AI Market Analysis</h2>
+        <p>{{ report }}</p>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+        const forecastData = {{ forecast.to_json(orient="records") | safe }};
+        const labels = forecastData.map(d => d.ds);
+        const prices = forecastData.map(d => d.yhat);
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Forecasted Aluminum Price',
+                    data: prices,
+                    fill: false,
+                    borderColor: 'green',
+                    tension: 0.1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
